@@ -20,9 +20,7 @@ import io.javaworkshop.moviecatalogservices.services.UserRatingInfo;
 @RestController
 @RequestMapping("/catalog")
 
-
 public class MovieCatalogResource {
-
     private final RestTemplate restTemplate;
     private final UserRatingInfo userRatingInfo;
     private final MovieInfo movieInfo;
@@ -33,7 +31,8 @@ public class MovieCatalogResource {
         this.movieInfo = movieInfo;
     }
 
-     @RequestMapping("/{userId}")
+    @RequestMapping("/{userId}")
+    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
 
         UserRating userRating = userRatingInfo.getUserRating(userId);
@@ -41,13 +40,14 @@ public class MovieCatalogResource {
         return userRating.getUserRatings().stream().map(movieInfo::getCatalogItem).
                 collect(Collectors.toList());
     }
+}
 
-    /* Alternative way to call api
+/* Alternative way to call api
 Movie movie = webClientBuilder.build()
                         .get()
                         .uri("localhost:8082/movies/" + rating.getMovieId())
                         .retrieve()
                         .bodyToMono(Movie.class)
                         .block();
-                        */
-}
+*/ 
+

@@ -38,4 +38,8 @@ public class Movie {
     public void setOverview(String overview) {
         this.overview = overview;
     }
+
+    public String getDescription() {
+        return null;
+    }
 } 
