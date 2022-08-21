@@ -3,6 +3,8 @@ package io.javaworkshop.moviecatalogservices.resources;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,23 +23,22 @@ import io.javaworkshop.moviecatalogservices.services.UserRatingInfo;
 @RequestMapping("/catalog")
 
 public class MovieCatalogResource {
-    private final RestTemplate restTemplate;
-    private final UserRatingInfo userRatingInfo;
-    private final MovieInfo movieInfo;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private UserRatingInfo userRatingInfo;
+    @Autowired
+    private MovieInfo movieInfo;
 
-    public MovieCatalogResource(RestTemplate restTemplate, UserRatingInfo userRatingInfo, MovieInfo movieInfo) {
-        this.restTemplate = restTemplate;
-        this.userRatingInfo = userRatingInfo;
-        this.movieInfo = movieInfo;
-    }
+   
 
     @RequestMapping("/{userId}")
-    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
+    // @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId) {
 
         UserRating userRating = userRatingInfo.getUserRating(userId);
 
-        return userRating.getUserRatings().stream().map(movieInfo::getCatalogItem).
+        return userRating.getUserRatings().stream().map(userRatings->movieInfo.getCatalogItem(userRatings)).
                 collect(Collectors.toList());
     }
 }

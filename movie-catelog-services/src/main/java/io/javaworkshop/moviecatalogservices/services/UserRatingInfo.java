@@ -15,12 +15,10 @@ import io.javaworkshop.moviecatalogservices.models.UserRating;
 
 @Service
 public class UserRatingInfo {
+    @Autowired
+    private RestTemplate restTemplate;
 
-    private final RestTemplate restTemplate;
-
-    public UserRatingInfo(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+   
 
     @HystrixCommand(fallbackMethod = "getFallbackUserRating",
             commandProperties = {
