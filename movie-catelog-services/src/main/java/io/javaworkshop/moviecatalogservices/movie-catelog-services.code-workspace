@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "movie-catelog-services",
+			"path": "..\\..\\..\\..\\..\\.."
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
+}
